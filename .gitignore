@@ -1,0 +1,4 @@
+.dockerignore
+schema.rtf
+.env
+*.txt
