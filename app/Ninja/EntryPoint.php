@@ -93,8 +93,10 @@ class EntryPoint
             $args = $this->website->getControllerArgs($name, $super);
             $controller = $this->website->getController($name, $args, $user, $super);
             [$name, $action] = $this->isCallable($controller, $action, $name, $this->ispublic);
+           
             if ($name && $action) {
                 $page = $controller->$action(...$route);
+                
                 if ($page && \is_array($page)) {
                     //dump( microtime(true) - $start); //.17
                     $pagevars = $page['variables'] ?? [];
@@ -127,6 +129,8 @@ class EntryPoint
             $output = 'Database error: ' . $e->getMessage() . ' in ' .
             $e->getFile() . ':' . $e->getLine();
         }
+
+       
         $output = $this->loadTemplate($page['template'], $layoutVariables);
         $layoutVariables['output'] = $output ?? '';
         return $layoutVariables;

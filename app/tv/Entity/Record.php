@@ -10,8 +10,9 @@ namespace tv\Entity;
     public $title;
     public $page;
     public $recdate;
+    public $series_id;
 
-    public function __construct(protected \Ninja\DatabaseTable $table)
+    public function __construct(protected \Ninja\DatabaseTable $foreigntable, protected \Ninja\DatabaseTable $table)
     {
     }
     

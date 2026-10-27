@@ -13,5 +13,4 @@ interface Website
     public function setNavBar();
     public function create(string $name): void;
     public function setHome(string $name): string;
-    public function getCurrentPage(): mixed;
 }
