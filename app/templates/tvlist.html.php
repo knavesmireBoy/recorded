@@ -1,13 +1,17 @@
 <?php 
   
 foreach($files as $file){
-    $id = $file->series_id;
-    $href = $id ? "/tvlist/toggle/$id" : "";
+    $series = $file->series_id;
+    $href = $series ? "/tvlist/toggle/$series" : '';
+    $tog = $_COOKIE['tog'] ?? null;
+    $myid = $file->id;
+    $del = "/tvlist/delete/$myid";
     ?>
-    <p><a href="<?= $href; ?>"><?= $file->title; ?></a></p>
-    <?php
-    if(isset($subfiles) && $tog && $tog === $id){
-        $group = $subfiles;
-        include TEMPLATE . 'series.html.php';
-    }   
+    <p><a href="<?= $href; ?>"><?= $file->title; ?></a> <a href="<?= $del; ?>">delete</a></p>
+    <?php  
+        if(!empty($group) && $tog == $series){
+            include 'series.html.php';
+        }
 }
+    
+

@@ -17,9 +17,9 @@ require_once CONNECT;
 $layout = 'pagelayout.html.php';
 
 $route = fixUri();
-$uri = empty($route) || empty($route[0]) ? ['home', 'display'] : $route;
+$uri = empty($route) || empty($route[0]) ? ['tvlist', 'display'] : $route;
 
-$posts = ['edit'];
+$posts = ['edit', 'confirm'];
 $ispublic = inArray($uri[0], WEBPAGES) ? $uri[0] : '';
 $website = new \tv\tvWebsite($ispublic);
 

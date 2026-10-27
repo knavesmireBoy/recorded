@@ -11,7 +11,7 @@ class tvWebsite implements Website
 {
     private $recordTable;
     private $userTable;
-    private $seriesTable;
+    private $episodesTable;
     private $pdo;
     private $authentication;
     private $pages;
@@ -41,7 +41,7 @@ class tvWebsite implements Website
 
     public function getDefaultRoute(): string
     {
-        return $this->home;
+        return '/tvlist/display';
     }
 
     public function getProp($str = 'setallowed')
@@ -67,14 +67,12 @@ class tvWebsite implements Website
         $this->pdo = $pdo;
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         //$this->pdo->exec('SET NAMES "utf8"');
-        $this->seriesTable = new DatabaseTable($this, 'series', 'id', '\tv\Entity\Series', [&$this->seriesTable, &$this->recordTable]);
-        $this->recordTable = new DatabaseTable($this, 'recordings', 'id', '\tv\Entity\Record', [$this->seriesTable, &$this->recordTable]);
+        $this->episodesTable = new DatabaseTable($this, 'episodes', 'recording_id', '\tv\Entity\Episodes', [&$this->episodesTable, &$this->recordTable]);
+        $this->recordTable = new DatabaseTable($this, 'recordings', 'id', '\tv\Entity\Record', [&$this->recordTable, $this->episodesTable]);
         $this->userTable = new DatabaseTable($this, 'users', 'id', '\PoloAfrica\Entity\User', [&$this->userTable]);
         if ($this->userTable) {
             $this->authentication = new Authentication($this->userTable, 'email', 'password');
         }
-
-       //doSetCookie(false)('tog');
     }
 
     private function validate($key, $array)
@@ -129,7 +127,7 @@ class tvWebsite implements Website
             'login' => [$this->authentication],
             'logger' => [$this->authentication],
             'user' => [$this->userTable],
-            'tvlist' => [$this->recordTable, $this->seriesTable]
+            'tvlist' => [$this->recordTable, $this->episodesTable]
         ];
 
         $ensureArray = fnull([], 'is_array');

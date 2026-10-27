@@ -4,11 +4,10 @@ namespace tv\Entity;
 
 
 
- class Series extends Entity {
+ class Episodes extends Entity {
 
-    public $id;
-    public $title;
-    public $recdate;
+    public $recording_id;
+    public $series_id;
 
     public function __construct(protected \Ninja\DatabaseTable $table, protected \Ninja\DatabaseTable $foreigntable)
     {

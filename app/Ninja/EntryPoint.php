@@ -54,21 +54,22 @@ class EntryPoint
             }
         }
         if(!$pass){
-            reLocate('/pages/retour/controller');
+            reLocate('/tvlist/display');
         }
             
         return is_callable([$controller, $action]);
     }
 
-    public function run($uri, $method, $defaultKlas = '', $home = 'home')
+    public function run($uri, $method, $defaultKlas = '', $home = '/tvlist/display')
     {
         try {
             $this->checkUri($uri);
-            if ($uri == '' || $uri === 'home') {
+            if ($uri == '') {
                 $this->website->setHome($home);
                 $uri = $this->website->getDefaultRoute();
             }
             $start = microtime(true);
+            $redirect = null;
             $page = null;
             $vars = [];
             $output = null;
@@ -95,8 +96,9 @@ class EntryPoint
             [$name, $action] = $this->isCallable($controller, $action, $name, $this->ispublic);
            
             if ($name && $action) {
+               
                 $page = $controller->$action(...$route);
-                
+          
                 if ($page && \is_array($page)) {
                     //dump( microtime(true) - $start); //.17
                     $pagevars = $page['variables'] ?? [];

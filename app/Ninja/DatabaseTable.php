@@ -149,7 +149,6 @@ class DatabaseTable
         $values = [
             ':value' => $v
         ];
-
         $stmt->execute($values);
     }
 
@@ -168,19 +167,13 @@ class DatabaseTable
 
     public function findAll(?string $ob = null, int $lt = 0, int $ofst = 0, $mode = \PDO::FETCH_CLASS)
     {
-        if (!$this->table) {
-            if (isset($_COOKIE['article'])) {
-                reLocate(ARTICLES_EDIT . $_COOKIE['article'] . '/table');
-            } else {
-                reLocate(BADMINTON . '/table');
-            }
-        }
+       
         $query = 'SELECT * FROM ' . $this->table;
 
         if ($ob) {
             $query = $this->orderBy($ob, $query);
         } else {
-            $query .= ' ORDER BY id';
+            $query .= ' ORDER BY ' . $this->primaryKey;
         }
 
         if ($lt > 0) {
@@ -196,7 +189,7 @@ class DatabaseTable
 
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
-
+       
         if ($mode === \PDO::FETCH_CLASS) {
             return $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->className, $this->constrArgs);
         }
@@ -241,7 +234,7 @@ class DatabaseTable
             if ($ob) {
                 $query = $this->orderBy($ob, $query);
             } else {
-                $query .= ' ORDER BY id';
+                $query .= ' ORDER BY ' . $this->primaryKey;
             }
 
             if ($lt > 0) {

@@ -20,16 +20,36 @@ class Tvlist extends Controller
 
     public function display(){
          $files = $this->table->findAll();
-
          $tog = isset($_COOKIE['tog']) ? $_COOKIE['tog'] : 0;
-         $subfiles = $this->foreigntable->find('id', $tog);
-
+        $group = $this->foreigntable->find('series_id', $tog);
+        
+       
+        $episodes = $this->foreigntable->findAll();
+        $eps = array_map(fn($o) => $o->recording_id, $episodes);
+        $tmp = [];
+      
+        foreach ($files as $file) {
+            if(!in_array($file->id, $eps)){
+                $tmp[] = $file;
+            }
+        }
+        $eps = [];
+        if(!empty($group)){
+            $groupIds = array_map(fn($o) => $o->recording_id, $group);
+           
+            foreach ($files as $file) {
+                if(in_array($file->id, $groupIds)){
+                    $eps[] = $file;
+                }
+            }
+        }
+        $files = $tmp;
          return [
              'template' => 'tvlist.html.php',
              'title' => 'TV List',
              'variables' => [
                  'files' => $files,
-                 'subfiles' => $subfiles,
+                 'group' => $eps,
                  'tog' => $tog ? intval($tog) : 0,
                  'heading' => empty($files) ? 'Add a page by clicking the + button' : '',
                  'action' => '/pages/delete/',
@@ -54,6 +74,33 @@ class Tvlist extends Controller
                 ]
             ];
    }
+
+
+   public function confirm(){
+   
+   }
+
+   public function confirmSubmit(){
+    $this->table->delete('id', $_POST['pk']);
+   }
+
+
+   public function delete(?int $id){
+
+    $file = $this->fetch('table', 'id', $id);
+
+    return [
+        'template' => 'delete.html.php',
+        'title' => 'TV List',
+        'variables' => [
+            'action' => '/tvlist/confirm/',
+            'perform' => 'delete',
+            'exit' => '/tvlist/display',
+            'file' => $file
+            ]
+        ];
+   }
+
    public function toggle(int $id){
 
     $set = doSetCookie(true);
