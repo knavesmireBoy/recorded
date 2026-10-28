@@ -1,6 +1,7 @@
 <?php
 
 namespace Ninja;
+
 use tv\tvWebsite;
 
 class DatabaseTable
@@ -39,28 +40,30 @@ class DatabaseTable
     //
     private function postgresInsert($flag = true)
     {
-        $tbl = $this->table;
-        $res = $this->pdo->query("SELECT pg_get_serial_sequence('$tbl', 'id')", \PDO::FETCH_NUM);
-        [$seq] = $res->fetchAll(\PDO::FETCH_COLUMN, 0);
-        $res = $this->pdo->query("SELECT last_value FROM $seq", \PDO::FETCH_NUM);
-        [$i] = $res->fetchAll(\PDO::FETCH_COLUMN, 0);
-        $res = $this->pdo->query("SELECT MAX(id) FROM $tbl", \PDO::FETCH_NUM);
-        [$max] = $res->fetchAll(\PDO::FETCH_COLUMN, 0);
-        $i = intval($i);
-        $max = intval($max);
-        $sql = $i <= $max ? "SELECT setval('$seq', $max)" : '';
-        if ($sql && $flag) {
-            $res = $this->pdo->query($sql)->fetch();
-            $i = current($res);
-            $i = $i ? intval($i) : $max;
-        }
-        return $i;
+        
+            $tbl = $this->table;
+            $res = $this->pdo->query("SELECT pg_get_serial_sequence('$tbl', 'id')", \PDO::FETCH_NUM);
+            [$seq] = $res->fetchAll(\PDO::FETCH_COLUMN, 0);
+            $res = $this->pdo->query("SELECT last_value FROM $seq", \PDO::FETCH_NUM);
+            [$i] = $res->fetchAll(\PDO::FETCH_COLUMN, 0);
+            $res = $this->pdo->query("SELECT MAX(id) FROM $tbl", \PDO::FETCH_NUM);
+            [$max] = $res->fetchAll(\PDO::FETCH_COLUMN, 0);
+            $i = intval($i);
+            $max = intval($max);
+            $sql = $i <= $max ? "SELECT setval('$seq', $max)" : '';
+            if ($sql && $flag) {
+                  $res = $this->pdo->query($sql)->fetch();
+                  $i = current($res);
+                  $i = $i ? intval($i) : $max;
+            }
+            return $i;
     }
 
     private function insert(array $values, bool $flag = true)
     {
         //make sure no spaces in table name: `user `
         $seq = false;
+
         $query = 'INSERT INTO `' . $this->table . '` (';
         foreach ($values as $key => $value) {
             $query .= '`' . $key . '`,';
@@ -79,12 +82,16 @@ class DatabaseTable
             $query = preg_replace('/`/', '', $query);
             $seq = true;
         }
+
         $stmt = $this->pdo->prepare($query);
         if ($seq) {
             //BEFORE you execute
-            $i = $this->postgresInsert($flag);
+            if ($this->primaryKey === 'id') {
+                $i = $this->postgresInsert($flag);
+                $stmt->execute($values);
+                return $i + 1;
+            }
             $stmt->execute($values);
-            return $i + 1;
         } else {
             $stmt->execute($values);
             return $this->pdo->lastInsertId();
@@ -106,14 +113,14 @@ class DatabaseTable
     private function update(array $values)
     {
         $k = $this->primaryKey;
-        $postgres =  DBSYSTEM === 'postgres';
+        $postgres = DBSYSTEM === 'postgres';
 
         $query = 'UPDATE `' . $this->table . '` SET ';
 
         foreach ($values as $key => $value) {
-            if ($postgres && $key == 'id') {
+            if ($postgres && $key == $this->primaryKey) {
                 $values['pk'] = $values[$k];
-                unset($values['id']);
+                unset($values[$this->primaryKey]);
                 continue;
             }
             $query .= '`' . $key . '` = :' . $key . ',';
@@ -126,6 +133,7 @@ class DatabaseTable
         } else {
             $values['pk'] = $values[$k];
         }
+
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($values);
     }
@@ -167,7 +175,7 @@ class DatabaseTable
 
     public function findAll(?string $ob = null, int $lt = 0, int $ofst = 0, $mode = \PDO::FETCH_CLASS)
     {
-       
+
         $query = 'SELECT * FROM ' . $this->table;
 
         if ($ob) {
@@ -189,7 +197,7 @@ class DatabaseTable
 
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
-       
+
         if ($mode === \PDO::FETCH_CLASS) {
             return $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->className, $this->constrArgs);
         }
@@ -245,7 +253,6 @@ class DatabaseTable
                 $query .= ' OFFSET ' . $ofst;
             }
 
-            
             $stmt = $this->pdo->prepare($query);
             //if(preg_match('/like/i', $op)) dump($parameters);
 
@@ -265,9 +272,9 @@ class DatabaseTable
         if (empty($record)) {
             return $entity;
         }
-        //force insert??
+        //force insert?? join tables may not auto_increment so primaryKey is required force insert
         if ($arg && \is_bool($arg)) {
-           // return $this->insert($record);
+            return $this->insert($record);
         }
 
         if (empty($record[$this->primaryKey])) {
@@ -275,6 +282,7 @@ class DatabaseTable
             $insertId = $this->insert($record, $arg);
             $entity->{$this->primaryKey} = $insertId;
         } else {
+           
             $this->update($record);
         }
         /*

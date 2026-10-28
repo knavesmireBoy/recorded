@@ -6,8 +6,8 @@ use Ninja\DatabaseTable;
 use tv\Entity\Entity;
 use tv\tvWebsite;
 
-abstract class Controller {
-
+abstract class Controller
+{
     protected $attributes;
 
     protected function fetch(string $table, string $prop, mixed $val, mixed ...$rest)
@@ -23,27 +23,6 @@ abstract class Controller {
         }
         return empty($ret) ? null : $ret[0];
     }
-    /*
-    public function fetch(string $t, string $prop, mixed $val, ...$rest)
-    {
-        $ret = [];
-        $mod = false;
-        if ($val) { //safeguard against missing values
-            if (is_numeric(strpos($t, '_'))) {
-                $t = substr($t, 1);
-                $mod = true;
-            }
-            if (strtoupper($t) === $t) { //PDO::FETCH_ASSOC
-                $t = strtolower($t);
-                $ret = $this->{$t}->find($prop, $val, null, 0, 0, \PDO::FETCH_ASSOC);
-            } else {
-                $ret = $this->{$t}->find($prop, $val, ...$rest);
-            }
-        }
-        return empty($ret) ? null : ($mod ? $ret : $ret[0]);
-    }
-*/
-
     protected function getNameOfClass()
     {
         return static::class;
@@ -71,25 +50,31 @@ abstract class Controller {
         }
     }
 
-    abstract public function onpersist(?Entity $e, $id = '', $fail = '');
+    abstract public function onpersist($e, $id = '', $fail = '');
 
-    protected function persist(array $record, string $route = 'edit', bool $insert = false, string $tablename = 'table')
-    { 
-        $unset = doSetCookie(false);
-        $set = doSetCookie(true);
-        $record = $this->onCheckAllowed($record, $insert, $tablename);
-        try {
-            $unset('error');
-            $e = $this->{$tablename}->save($record);
-        } catch (\Exception $e) {
-            dump($e);
-            $msg = "Controller Persist: Error saving record: " . $e->getMessage();
-            $set('error', $msg);
-            $route = $this->getClassName();
-            reLocate("/$route/onpersist/_/$id/$msg");
-            //reLocate(PAGES_EDIT . $id);
-        }
-        return $this->onpersist($e);
+    public function persist($pk = 'id', $attrs = [], $route = 'edit')
+    {
+        return function (array $record, bool $insert = false, string $tablename = 'table') use($pk, $attrs, $route) {
+            $unset = doSetCookie(false);
+            $set = doSetCookie(true);
+            //$attrs more than a few slot tables require just one attribute to be checked
+            //instead of setting these in website controller fallback to some default attrs ['title']
+            $check = $this->onCheckAllowed($pk, $attrs);
+           // $record = $check($record, $insert, $tablename);
+         
+            try {
+                $unset('error');
+                $e = $this->{$tablename}->save($record, $insert && $pk !== 'id');
+            } catch (\Exception $e) {
+                dump($e);
+                $msg = "Controller Persist: Error saving record: " . $e->getMessage();
+                $set('error', $msg);
+                $route = $this->getClassName();
+                reLocate("/$route/onpersist/0/$id/$msg");
+                //reLocate(PAGES_EDIT . $id);
+            }
+            return $this->onpersist($e);
+        };
     }
 
     public function destroy()
@@ -102,8 +87,9 @@ abstract class Controller {
         $this->attributes = $attributes;
     }
 
-    protected function onCheckAllowed(array $payload, bool $insert = false, string $tablename = 'table')
-        {
+    protected function onCheckAllowed($pk = 'id', $defaultattrs = [])
+    {
+        return function (array $payload, bool $insert = false, string $tablename = 'table') use($pk, $defaultattrs) {
             $fail = '';
             $warnings = [];
             ///!!WE ASSUME that an the unique identifier is named id
@@ -111,19 +97,15 @@ abstract class Controller {
             $id =  $payload['id'] ?? 0;
             $route = $this->getClassName();
 
-            if(!$insert && !isset($payload['id'])){
-                reLocate("/$route/onpersist/_/0/onupdate");
+            if (!$insert && !isset($payload[$pk])) {
+              //  reLocate("/$route/onpersist//0/onupdate");
             }
-            if($insert && isset($payload['id'])){
-                reLocate("/$route/onpersist/_/$id/oninsert");
+            if ($insert && isset($payload[$pk])) {
+               // reLocate("/$route/onpersist//$id/oninsert");
             }
-            $attrs = $this->attributes[$tablename] ?? [];
+            $attrs = $this->attributes[$tablename] ?? $defaultattrs;
 
-            if(!isset($this->attributes[$tablename])){
-                $attrs = ['series_id'];
-            }
-        
-            if($attrs === []){
+            if ($attrs === []) {
                 return $payload;
             }
             foreach ($payload as $k => $v) {
@@ -136,6 +118,7 @@ abstract class Controller {
                 //id optional on insert
                 $attrs = safeFilter($attrs, fn($a) => $a !== 'id');
                 $payout = array_keys($payload);
+
                 foreach ($attrs as $a) {
                     if (!in_array($a, $payout)) {
                         $fail = $a;
@@ -143,22 +126,24 @@ abstract class Controller {
                     }
                 }
             }
-            if($fail){
+            if ($fail) {
                 $route = $this->getClassName();
                 $fail = "persist_$fail";
                 $id =  $payload['id'] ?? 0;
-                reLocate("/$route/onpersist/_/$id/$fail");
+                reLocate("/$route/onpersist/1/$id/$fail");
             }
-            if($warnings !== []){
+
+            if ($warnings !== []) {
                 $set = doSetCookie(true);
                 $set('persist', current($warnings));
             }
             return $payload;
+        };
+    }
+    protected function groundZero(array $post)
+    {
+        if (empty($post)) {
+            reLocate(PAGES_DISPLAY);
         }
-        protected function groundZero(array $post)
-        {
-            if (empty($post)) {
-                reLocate(PAGES_DISPLAY);
-            }
-        }
+    }
 }
