@@ -22,4 +22,11 @@ namespace tv\Entity;
     public function delete($id){
       return $this->table->delete('id', $id);
     }
+
+    public function getEpisode($flag = false){
+
+      $episode = $this->fetch('foreigntable','recording_id', $this->id);
+      $this->series_id = $episode->series_id;
+      return $this;
+    }
  }

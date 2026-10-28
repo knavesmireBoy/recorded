@@ -9,7 +9,7 @@ foreach($files as $file){
     ?>
     <p><a href="<?= $href; ?>"><?= $file->title; ?></a> <a href="<?= $del; ?>">delete</a></p>
     <?php  
-        if(!empty($group) && $tog == $series){
+        if($tog && $tog == $series){
             include 'series.html.php';
         }
 }

@@ -15,33 +15,26 @@ class Tvlist extends Controller
 
     }
     public function onpersist(?Entity $e, $id = '', $fail = ''){
-
     }
 
     public function display(){
          $files = $this->table->findAll();
          $tog = isset($_COOKIE['tog']) ? $_COOKIE['tog'] : 0;
-        $group = $this->foreigntable->find('series_id', $tog);
-        
-       
-        $episodes = $this->foreigntable->findAll();
-        $eps = array_map(fn($o) => $o->recording_id, $episodes);
-        $tmp = [];
+         $episodes = $this->foreigntable->findAll();
+         $episodeIds = array_map(fn($o) => $o->recording_id, $episodes);
+         $tmp = [];
+
       
         foreach ($files as $file) {
-            if(!in_array($file->id, $eps)){
+            if(!in_array($file->id, $episodeIds)){
                 $tmp[] = $file;
             }
         }
-        $eps = [];
-        if(!empty($group)){
-            $groupIds = array_map(fn($o) => $o->recording_id, $group);
-           
-            foreach ($files as $file) {
-                if(in_array($file->id, $groupIds)){
-                    $eps[] = $file;
-                }
-            }
+        $episodes = safeFilter(array_udiff($files, $tmp, fn($a, $b) => $a->id - $b->id));
+        $episodes = array_map(fn($o) => $o->getEpisode(true), $episodes);
+
+        if($tog){
+            //$episodes = safeFilter($episodes, fn($o) => $o->series_id == $tog);
         }
         $files = $tmp;
          return [
@@ -49,7 +42,7 @@ class Tvlist extends Controller
              'title' => 'TV List',
              'variables' => [
                  'files' => $files,
-                 'group' => $eps,
+                 'group' => $episodes,
                  'tog' => $tog ? intval($tog) : 0,
                  'heading' => empty($files) ? 'Add a page by clicking the + button' : '',
                  'action' => '/pages/delete/',
