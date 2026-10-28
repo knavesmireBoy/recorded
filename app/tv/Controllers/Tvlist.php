@@ -15,6 +15,7 @@ class Tvlist extends Controller
 
     }
     public function onpersist(?Entity $e, $id = '', $fail = ''){
+        return $e;
     }
 
     public function display(){
@@ -34,7 +35,7 @@ class Tvlist extends Controller
         $episodes = array_map(fn($o) => $o->getEpisode(true), $episodes);
 
         if($tog){
-            //$episodes = safeFilter($episodes, fn($o) => $o->series_id == $tog);
+            $episodes = safeFilter($episodes, fn($o) => $o->series_id == $tog);
         }
         $files = $tmp;
          return [
@@ -77,11 +78,57 @@ class Tvlist extends Controller
     $this->table->delete('id', $_POST['pk']);
    }
 
+   public function editSubmit(){
+
+    $id = nullify($_POST['pk']);
+    $data = $_POST['data'];
+    $assign = $_POST['assign'];
+
+    if($assign && ! empty($data['series_id'])){
+        return $this->edit($id ?? 0, 'conflict');
+    }
+    $data['id'] = $id;
+    $data = array_map(nullify(...), $data);
+    $e = $this->persist($data, 'edit', is_null($id));
+
+    if($e && $assign){
+        $this->persist(['recording_id' => $e->id,'series_id' => $assign], 'edit', is_null($id), 'foreigntable');
+    }
+   }
+
+   protected function filterBy(?string $prop = ''){
+    $files = $this->table->findAll();
+    if($prop){
+        return safeFilter($files, fn($o) => $o->{$prop});
+    }
+   }
+
+   public function add(){
+    return $this->edit();
+   }
+
+   public function edit(?int $id = 0, $key = ''){
+    $file = $this->fetch('table', 'id', $id);
+    $files = $this->filterBy('series_id');
+    $options = array_column($files, 'title', 'series_id');
+    $episode = $file?->getEpisode();
+    return [
+        'template' => 'edit.html.php',
+        'title' => 'TV List',
+        'variables' => [
+            'action' => '/tvlist/edit/',
+            'exit' => '/tvlist/display',
+            'options' => $options,
+            'key' => $key,
+            'target' => $episode?->series_id ?? 0,
+            'identity' => 'series_id',
+            'file' => $file
+            ]
+        ];
+   }
 
    public function delete(?int $id){
-
     $file = $this->fetch('table', 'id', $id);
-
     return [
         'template' => 'delete.html.php',
         'title' => 'TV List',

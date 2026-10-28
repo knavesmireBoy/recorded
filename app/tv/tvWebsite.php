@@ -92,7 +92,7 @@ class tvWebsite implements Website
         $controllers = [
             'user' => ['table' => ['id','name', 'email', 'permissions', 'password']],
             'login' => [],
-            'tvlist' => ['table' => 'id', 'title', 'recdate', 'series_id'],
+            'tvlist' => ['table' => ['id', 'title', 'recdate', 'series_id'], 'foreigntable' => ['recording_id', 'series_id']],
 
         ];
 

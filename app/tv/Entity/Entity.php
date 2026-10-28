@@ -73,7 +73,7 @@ abstract class Entity
 
             //only column required by slot
             if(!isset($this->attributes[$tablename])){
-                $attrs = ['title'];
+                $attrs = ['series_id'];
             }
             $attrs = $this->attributes[$tablename] ?? [];
             if($attrs === []){

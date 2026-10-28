@@ -80,7 +80,7 @@ abstract class Controller {
         $record = $this->onCheckAllowed($record, $insert, $tablename);
         try {
             $unset('error');
-            $e = $this->table->save($record);
+            $e = $this->{$tablename}->save($record);
         } catch (\Exception $e) {
             dump($e);
             $msg = "Controller Persist: Error saving record: " . $e->getMessage();
@@ -117,11 +117,12 @@ abstract class Controller {
             if($insert && isset($payload['id'])){
                 reLocate("/$route/onpersist/_/$id/oninsert");
             }
+            $attrs = $this->attributes[$tablename] ?? [];
 
             if(!isset($this->attributes[$tablename])){
-                $attrs = ['title'];
+                $attrs = ['series_id'];
             }
-            $attrs = $this->attributes[$tablename] ?? [];
+        
             if($attrs === []){
                 return $payload;
             }
