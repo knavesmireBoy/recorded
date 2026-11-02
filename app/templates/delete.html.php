@@ -14,7 +14,8 @@ if (isset($perform)) {
     if ($perform === 'delete') { ?>
     <div class="affirm">
       <p>Are you sure you want to <strong>delete</strong> this record?</p>
-      <p>Or <strong>update</strong> this record <a href="<?= $edit; ?>">here</a></p>
+      <p>You may <strong><a href="<?= TV_EDIT . $id ?>">UPDATE</a></strong> this record</p>
+      <p>Or you can <strong><a href="<?= TV_ADD?>">ADD</a></strong> a record</p>
     </div>
     <?php }
     ?>
@@ -24,4 +25,3 @@ if (isset($perform)) {
     <input id="pk" type="hidden" name="pk" value="<?= $id ?>">
   </form>
 <?php } ?>
-<p class="remplacer"><a href="<?= $exit ?>">exit</a></p>

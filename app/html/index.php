@@ -20,10 +20,10 @@ $route = fixUri();
 $uri = empty($route) || empty($route[0]) ? ['tvlist', 'display'] : $route;
 
 $posts = ['edit', 'confirm'];
-$ispublic = inArray($uri[0], WEBPAGES) ? $uri[0] : '';
-$website = new \tv\tvWebsite($ispublic);
 
-$entryPoint = new \Ninja\EntryPoint($website, $ispublic, $posts);
+$website = new \tv\tvWebsite(false);
+
+$entryPoint = new \Ninja\EntryPoint($website, false, $posts);
 $layoutVariables = $entryPoint->run(implode('/',$uri), $_SERVER['REQUEST_METHOD'], 'public');
 
 echo $entryPoint->loadTemplate($layout, $layoutVariables); 

@@ -16,12 +16,12 @@ namespace tv\Entity;
     }
     
     public function onpersist(?Entity $e, $id = '', $key = ''){
-
     }
 
     public function delete($id){
       return $this->table->delete('id', $id);
     }
+
 
     public function getEpisode($flag = false){
 
@@ -31,6 +31,9 @@ namespace tv\Entity;
         return $this;
       }
       return $episode;
-     
+    }
+
+    public function validate(array $payload){
+
     }
  }

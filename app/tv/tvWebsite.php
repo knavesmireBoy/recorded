@@ -49,7 +49,6 @@ class tvWebsite implements Website
         return isset($this->{$str});
     }
 
-
     public function setHome(string $str): string
     {
         $this->home = $str;
@@ -69,10 +68,6 @@ class tvWebsite implements Website
         //$this->pdo->exec('SET NAMES "utf8"');
         $this->episodesTable = new DatabaseTable($this, 'episodes', 'recording_id', '\tv\Entity\Episodes', [&$this->episodesTable, &$this->recordTable]);
         $this->recordTable = new DatabaseTable($this, 'recordings', 'id', '\tv\Entity\Record', [&$this->recordTable, $this->episodesTable]);
-        $this->userTable = new DatabaseTable($this, 'users', 'id', '\PoloAfrica\Entity\User', [&$this->userTable]);
-        if ($this->userTable) {
-            $this->authentication = new Authentication($this->userTable, 'email', 'password');
-        }
     }
 
     private function validate($key, $array)
@@ -92,7 +87,7 @@ class tvWebsite implements Website
         $controllers = [
             'user' => ['table' => ['id','name', 'email', 'permissions', 'password']],
             'login' => [],
-            'tvlist' => ['table' => ['title', 'recdate'], 'foreigntable' => ['recording_id', 'series_id']],
+            'tvlist' => ['table' => ['id', 'title', 'recdate', 'series_id'], 'FOREIGNTABLE' => ['recording_id', 'series_id']],
 
         ];
 

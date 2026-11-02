@@ -1,17 +1,27 @@
-<?php 
-  
+<h3>Recordings</h3>
+<ul class="<?= $klas; ?>">
+    <?php 
+
 foreach($files as $file){
     $series = $file->series_id;
-    $href = $series ? "/tvlist/toggle/$series" : '';
+    $t = $file->title;
+    $href = $series ? "/tvlist/toggle/$series" : '/tvlist/display';
     $tog = intval($_COOKIE['tog'] ?? null);
     $myid = $file->id;
     $del = "/tvlist/delete/$myid";
+    $klas = $file->series_id ? 'series' : '';
     ?>
-    <p><a href="<?= $href; ?>"><?= $file->title; ?></a> <a href="<?= $del; ?>">delete</a></p>
-    <?php  
-        if($tog === $series){
-            include 'series.html.php';
-        }
-}
-    
-
+    <li class="<?= $klas; ?>">
+    <?php if($series) : ?>
+    <a href="<?= $href; ?>"><?= $t; ?></a>
+    <?php else : ?>
+        <span><?= $t; ?></span>
+<?php
+endif;
+    include '_feedback.html.php';
+    include 'series.html.php';
+} ?>
+</ul>
+<?php
+    include 'search.html.php';
+    include '_paginate.html.php';

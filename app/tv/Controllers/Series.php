@@ -5,12 +5,15 @@ namespace tv\Controllers;
 use Ninja\DatabaseTable;
 use tv\Controllers;
 use tv\Entity\Entity;
+use tv\Controllers;
 
 //include_once 'config.php';
 //include_once FUNCTIONS;
 
 class Series extends Controller
 {
+    
+    
     public function __construct(private DatabaseTable $table){
 
     }

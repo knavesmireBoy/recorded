@@ -12,7 +12,6 @@ try {
         }
         $params = ['host' => $connect, 'port' => 5432, 'database' => $db, 'user' => 'recorded_user', 'password' => $pwd, 'sslmode' => 'require'];
         //$params = ['host' => 'ep-soft-wave-abyjtquu-pooler.eu-west-2.aws.neon.tech', 'port' => 5432, 'database' => 'neondb', 'user' => 'neondb_owner', 'password' => 'npg_YBnC6DQXyjr0', 'sslmode' => 'require'];
-
    
         $db = sprintf(
             "pgsql:host=%s;port=%d;dbname=%s;user=%s;password=%s",
@@ -32,13 +31,20 @@ try {
         $user = $_ENV['DB_USERNAME'];
         $dbname = $_ENV['DB_DATABASE'];
         $host = $_ENV['DB_HOST'];
+
+        $pwd = 'covid19krauq';
+        $user = 'root';
+        $dbname = 'recordings';
+        $host = 'localhost';
+
         $pdo = new \PDO(
             "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
             $user,
             $pwd
         );
-        //$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        //$pdo->exec('SET NAMES "utf8"');
+
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->exec('SET NAMES "utf8"');
     }
 } catch (PDOException $e) {
     //$vars for pagehead,pageheader,pagenav

@@ -1,0 +1,66 @@
+h2 {
+    margin: 0;
+}
+
+section {
+    display: block;
+}
+
+section p {
+    text-align: justify;
+    font-size: 10pt;
+    color: black;
+}
+
+section img {
+    width: 20%;
+    float: right;
+    text-shadow: none;
+}
+
+section article {
+    margin-right: 23%;
+}
+
+h2, h2 span, footer{
+background: none;
+	}
+
+h2 span, h3 {
+    color: indigo;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-width: 0;
+}
+
+h2 span {
+    padding: 0 0 0 0em;
+}
+
+header, section input, section label, footer img, #footer_girl a:first-child, img#ani, #contactarea, iframe, video, #polo section:first-child img:last-of-type {
+    display: none;
+}
+
+.wrap footer {
+    margin: 0;
+    padding: 0;
+    display: block;
+    border: solid 1px red;
+}
+
+.wrap section a {
+    text-decoration: none;
+    color: #444;
+}
+
+.wrap footer > a:last-child {
+    text-align: left;
+}
+
+.wrap .override footer a:link {
+    display: block;
+    color: black;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}

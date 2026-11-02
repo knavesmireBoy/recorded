@@ -93,12 +93,8 @@ class EntryPoint
             }
             $args = $this->website->getControllerArgs($name, $super);
             $controller = $this->website->getController($name, $args, $user, $super);
-            [$name, $action] = $this->isCallable($controller, $action, $name, $this->ispublic);
-           
-            if ($name && $action) {
-               
+            if (is_callable([$controller, $action])) {
                 $page = $controller->$action(...$route);
-          
                 if ($page && \is_array($page)) {
                     //dump( microtime(true) - $start); //.17
                     $pagevars = $page['variables'] ?? [];
@@ -106,35 +102,22 @@ class EntryPoint
                     $layoutVariables = [...$vars, ...$pagevars];
                    // $layoutVariables['scripts'] = $this->website->getScripts("$name/$action");
                     $layoutVariables['TITLE'] = strtolower($layoutVariables['TITLE'] ?? '');
-                    $layoutVariables['pageid'] = in_array($layoutVariables['TITLE'], WEBPAGES) ? $layoutVariables['TITLE'] : '';
+                    $layoutVariables['pageid'] = $layoutVariables['TITLE'];
                 } else {
                     retour();
                 }
-                //if method is post the rest of the page will only be read on relocation
             } else {
                 http_response_code(404);
-                if ($redirect) {
-                    $p1 = '<p>The website has as yet no public pages</p>';
-                    $p2 = '<p>The website has as yet no articles assigned to its public pages</p>';
-                    $para = $redirect === 'pagebuild' ? $p1 : $p2;
-                    //$route may have a key of active to indicate we have a table for at least one page but there are no articles assigned
-                    $op = $redirect === 'page' ? 'Add' : 'Edit';
-                    $td1 = '<p><a href="/user/admin">Add content</a>';
-                    $td2 = "<p><a href='/pages/list/'>$op a page</a>";
-                    $todo = isset($_SESSION['nav']) ?  $td1 : $td2;
-                    $output = "$para$todo";
-                } else {
-                    reLocate('/pages/retour/');
-                }
+                reLocate('/tvlist/retour/');
             }
         } catch (\PDOException $e) {
             $output = 'Database error: ' . $e->getMessage() . ' in ' .
             $e->getFile() . ':' . $e->getLine();
         }
-
-       
-        $output = $this->loadTemplate($page['template'], $layoutVariables);
-        $layoutVariables['output'] = $output ?? '';
+        if(isset($page['template'])){
+            $output = $this->loadTemplate($page['template'], $layoutVariables);
+            $layoutVariables['output'] = $output ?? '';
+        }
         return $layoutVariables;
     }
 }

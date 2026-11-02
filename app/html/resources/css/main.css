@@ -1,0 +1,1052 @@
+@import url(https://fonts.googleapis.com/css?family=Merriweather:wght@400;700&display=swap);
+/* Mixin to prefix a property
+/// @author Kitty Giraudel
+/// @param {String} $property - Property name
+/// @param {*} $value - Property value
+/// @param {List} $prefixes (()) - List of prefixes to print
+/// */
+/*.selector {
+  @include prefix(transform, rotate(45deg), webkit ms);
+}
+  */
+/*
+https://www.sitepoint.com/building-linear-gradient-mixin-sass/#buildingthemixin
+Test if `$value` is a valid direction
+@param {*} $value - Value to test
+@return {Bool}
+*/
+/*
+@param {Keyword | Angle} $value - Value to convert
+@require {function} is-direction
+@require {function} convert-angle
+///@throw Cannot convert `value` to legacy syntax because it doesn't seem to be a direction.;
+*/
+/* a = (current browser width(100vw) - minimum operating size) DIVIDED by (max-range - min range)
+        b = (max-font-size(42) - base-font-size(28))
+        c = b * a
+        result = base-font-size + c
+    */
+/*https://gist.github.com/robinrendle/1d20c566c5e5fbd67f25*/
+/*Box sizing (the nuclear option)*/
+html {
+  -ms-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  -ms-box-sizing: inherit;
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+/* Fix font rendering defaults */
+html, button {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-size: 100%;
+}
+
+html, body {
+  height: 100%;
+}
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, input, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+}
+
+/* IE fixes for HTML5 elements */
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+strong, b, mark {
+  font-weight: bold;
+  font-style: inherit;
+}
+
+em, i, cite, q, address, dfn, var {
+  font-style: italic;
+  font-weight: inherit;
+}
+
+a, u, ins {
+  text-decoration: none;
+}
+
+pre, code, samp, kbd {
+  font-family: monospace;
+}
+
+iframe {
+  width: 100%;
+}
+
+img {
+  /*max-width: 100%;
+     height: auto;
+     -msinterpolation-mode: bicubic;*/
+  border: none;
+}
+
+input, select, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-size: 100%;
+}
+
+ol, ul, dl {
+  list-style: none;
+}
+
+@font-face {
+  font-family: "Handwritten";
+  src: url("../fonts/AlexBrush-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "sidebar";
+  src: url("../fonts/ebgaramond12-regular-webfont.eot");
+  /* IE9 Compat Modes */
+  src: url("../fonts/ebgaramond12-regular-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/ebgaramond12-regular-webfont.woff") format("woff"), url("../fonts/ebgaramond12-regular-webfont.woff2") format("woff2"), url("../fonts/ebgaramond12-regular-webfont.ttf") format("truetype"), url("../fonts/ebgaramond12-regular-webfont.svg#svgFontName") format("svg");
+  /* Legacy iOS */
+  font-weight: 700;
+  font-style: normal;
+}
+/*
+@import 'components/normalise';
+@import 'components/hacks';
+@import 'components/font-awesome';
+*/
+@font-face {
+  font-family: "Handwritten";
+  src: url("../fonts/AlexBrush-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Lozza";
+  src: url("../fonts/Lora-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "QuestaGrande";
+  src: url("../fonts/2-questa_grande_regular_31-webfont.woff2") format("woff2"), url("../fonts/2-questa_grande_regular_31-webfont.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "QuestaSans";
+  src: url("../fonts/2-Questa_Sans_Regular-webfont.woff2") format("woff2"), url("../fonts/2-Questa_Sans_Regular-webfont.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "sidebar";
+  src: url("../fonts/ebgaramond12-regular-webfont.eot");
+  /* IE9 Compat Modes */
+  src: url("../fonts/ebgaramond12-regular-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/ebgaramond12-regular-webfont.woff") format("woff"), url("../fonts/ebgaramond12-regular-webfont.woff2") format("woff2"), url("../fonts/ebgaramond12-regular-webfont.ttf") format("truetype"), url("../fonts/ebgaramond12-regular-webfont.svg#svgFontName") format("svg");
+  /* Legacy iOS */
+  font-weight: 700;
+  font-style: normal;
+}
+/* Generated by Font Squirrel (http://www.fontsquirrel.com) on April 22, 2015 */
+/*
+@import url(https://fonts.googleapis.com/css2family=Merriweather:ital,wght@0,300;0,400;1,300&family=Open+Sans:wght@300;400;600;700&display=swap);
+body{
+    font-family:'Open Sans',sans-serif;
+    background-color:#f6f9fc;
+    padding-bottom:3.25em
+}
+*/
+body {
+  font: normal 0.875em/1.75 Verdana, Arial, Helvetica, sans-serif;
+  background-color: white;
+}
+
+header,
+h2,
+h3,
+h2 span,
+header a h1 {
+  width: 100%;
+}
+
+.wrap > header > a {
+  white-space: nowrap;
+  text-align: left;
+}
+.wrap > header > a h1 {
+  text-indent: -9999px;
+  background-repeat: no-repeat;
+  font: 2em/2.6 Arial, Verdana, Helvetica, serif;
+}
+
+.no-js .wrap > header > a > h1 {
+  background-image: url("../images/dev/logo_mobile.svg"), linear-gradient(transparent, transparent);
+}
+
+.wrap > header {
+  background: rgb(102, 139, 76) url(../images/dev/A1_field_jackrussells.jpg) no-repeat 70% 0/cover;
+  background-blend-mode: multiply;
+}
+
+section a:link,
+section a:visited {
+  color: hsl(60deg, 50%, 40%);
+}
+section a:hover,
+section a:active {
+  color: hsl(60deg, 50%, 40%);
+}
+section h3 a:link,
+section h3 a:visited {
+  color: hsl(60deg, 50%, 40%);
+}
+section.active h3 a:hover {
+  color: hsl(64deg, 40%, 85%);
+}
+
+footer {
+  position: relative;
+  background-color: rgb(26, 60, 36);
+  background-image: url(../images/dev/footer.png), url(../images/dev/swirl.png);
+  background-repeat: no-repeat, repeat;
+  background-position: 48% bottom, center;
+  background-size: cover, 5%;
+}
+footer a:link,
+footer a:visited {
+  color: white;
+}
+footer > a {
+  border-top: dotted 1px hsl(60deg, 50%, 40%);
+  text-align: right;
+}
+footer b,
+footer div a:hover {
+  color: #bfbf40;
+}
+footer div#footer_boy > a {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  max-width: 1em;
+}
+footer #footer_girl a:first-child {
+  width: 6em;
+  margin: 0;
+  visibility: hidden;
+  display: block;
+}
+
+.menu {
+  background: 50% 1% url("../images/dev/polo_ball_sprite.png") no-repeat;
+  cursor: pointer;
+  -ms-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;
+  -ms-transition: transform 1s;
+  -moz-transition: transform 1s;
+  -o-transition: transform 1s;
+  -webkit-transition: transform 1s;
+  transition: transform 1s;
+}
+
+/*https://stackoverflow.com/questions/31412645/pseudo-element-100-width-is-not-taking-container-size*/
+h3,
+section > label {
+  font-size: 1.4em/1.75;
+  margin: 0;
+  font-weight: bold;
+  background-image: url(../images/dev/back-pattern.png);
+}
+
+h3,
+.read-more-trigger,
+.js section > img {
+  border-bottom: solid 1px white;
+}
+
+.override article p {
+  line-height: 1.55;
+}
+
+.menu:hover {
+  background-position: 50% 100%;
+  -webkit-transform: rotate(360deg);
+  transform: rotate(360deg);
+}
+
+section h3:nth-of-type(1),
+.read-more-trigger {
+  font-size: 1.4rem;
+  padding: 0.5em 0.5em 0.4em;
+  font-weight: bold;
+  color: hsl(60deg, 50%, 40%);
+  text-shadow: none;
+  background-color: hsl(64deg, 40%, 85%);
+}
+
+section:first-child .read-more-state ~ .read-more-trigger,
+.read-more-state:checked ~ .read-more-trigger {
+  color: white;
+  text-shadow: 1px 1px 1px black;
+  background-color: hsl(60deg, 50%, 40%);
+}
+section:first-child .read-more-state ~ .read-more-trigger:hover,
+.read-more-state:checked ~ .read-more-trigger:hover {
+  color: hsl(64deg, 40%, 85%);
+}
+
+section:first-child .read-more-state:checked ~ .read-more-trigger,
+.read-more-trigger {
+  color: hsl(60deg, 50%, 40%);
+  text-shadow: none;
+  background-color: hsl(64deg, 40%, 85%);
+}
+section:first-child .read-more-state:checked ~ .read-more-trigger:hover,
+.read-more-trigger:hover {
+  color: #8a8a2e;
+}
+
+section.active h3 {
+  background-color: hsl(60deg, 50%, 40%);
+}
+section.active h3 a {
+  color: white;
+  text-shadow: 1px 1px 1px black;
+  background-color: transparent;
+}
+section.active h3 a:hover {
+  color: hsl(64deg, 40%, 85%);
+}
+
+footer div:first-child a:last-child:before {
+  content: "";
+}
+
+.wrap > header > a {
+  text-align: left;
+}
+
+.wrap > header a h1 {
+  background-position: left bottom;
+  line-height: 1;
+}
+
+header nav > ul {
+  font: bold 0.9em/2 Arial, Verdana, Helvetica, serif;
+  opacity: 0.97;
+  background: white;
+  -webkit-box-shadow: -3px 3px 6px hsla(300deg, 10%, 20%, 0.75);
+  box-shadow: -3px 3px 6px hsla(300deg, 10%, 20%, 0.75);
+  border-radius: 2px;
+}
+header nav > ul > li a:link,
+header nav > ul > li a:visited {
+  padding: 0 1em 0 0;
+  display: block;
+  text-align: right;
+  border: 1px solid hsl(270deg, 100%, 20%);
+  border-width: 0 0 1px;
+  color: hsl(270deg, 100%, 20%);
+}
+header nav > ul > li:last-child a {
+  border-width: 0;
+}
+
+@media only screen and (max-width: 750px) {
+  header > nav > ul > li > a:hover,
+header > nav > ul > li > a:active {
+    color: hsl(60deg, 50%, 40%);
+    background: hsl(64deg, 40%, 85%) none;
+  }
+  #home header > nav > ul > li:nth-child(1) > a:link, #home header > nav > ul > li:nth-child(1) > a:visited {
+    color: hsl(64deg, 40%, 85%);
+    background: hsl(270deg, 100%, 20%) none;
+  }
+  #trust header > nav > ul > li:nth-child(2) > a:link, #trust header > nav > ul > li:nth-child(2) > a:visited {
+    color: hsl(64deg, 40%, 85%);
+    background: hsl(270deg, 100%, 20%) none;
+  }
+  #scholars header > nav > ul > li:nth-child(3) > a:link, #scholars header > nav > ul > li:nth-child(3) > a:visited {
+    color: hsl(64deg, 40%, 85%);
+    background: hsl(270deg, 100%, 20%) none;
+  }
+  #place header > nav > ul > li:nth-child(4) > a:link, #place header > nav > ul > li:nth-child(4) > a:visited {
+    color: hsl(64deg, 40%, 85%);
+    background: hsl(270deg, 100%, 20%) none;
+  }
+  #stay header > nav > ul > li:nth-child(5) > a:link, #stay header > nav > ul > li:nth-child(5) > a:visited {
+    color: hsl(64deg, 40%, 85%);
+    background: hsl(270deg, 100%, 20%) none;
+  }
+  #polo header > nav > ul > li:nth-child(6) > a:link, #polo header > nav > ul > li:nth-child(6) > a:visited {
+    color: hsl(64deg, 40%, 85%);
+    background: hsl(270deg, 100%, 20%) none;
+  }
+  #medley header > nav > ul > li:nth-child(7) > a:link, #medley header > nav > ul > li:nth-child(7) > a:visited {
+    color: hsl(64deg, 40%, 85%);
+    background: hsl(270deg, 100%, 20%) none;
+  }
+  #enquiries header > nav > ul > li:nth-child(8) > a:link, #enquiries header > nav > ul > li:nth-child(8) > a:visited {
+    color: hsl(64deg, 40%, 85%);
+    background: hsl(270deg, 100%, 20%) none;
+  }
+  #photos header > nav > ul > li:nth-child(9) > a:link, #photos header > nav > ul > li:nth-child(9) > a:visited {
+    color: hsl(64deg, 40%, 85%);
+    background: hsl(270deg, 100%, 20%) none;
+  }
+  #bond header > nav > ul > li:nth-child(10) > a:link, #bond header > nav > ul > li:nth-child(10) > a:visited {
+    color: hsl(64deg, 40%, 85%);
+    background: hsl(270deg, 100%, 20%) none;
+  }
+}
+@media only screen and (max-width: 430px) {
+  header > nav > ul {
+    background: transparent;
+    background: -webkit-linear-gradient(0deg, transparent, 20%, white 60%);
+    background: -o-linear-gradient(0deg, transparent, 20%, white 60%);
+    background: -moz-linear-gradient(0deg, transparent, 20%, white 60%);
+    background: linear-gradient(90deg, transparent, 20%, white 60%);
+    font-size: 1em;
+  }
+  header > nav > ul > li > a:hover,
+header > nav > ul > li > a:active {
+    color: hsl(60deg, 50%, 40%);
+    background: transparent;
+    background: -webkit-linear-gradient(0deg, transparent, 20%, hsl(64deg, 40%, 85%) 60%);
+    background: -o-linear-gradient(0deg, transparent, 20%, hsl(64deg, 40%, 85%) 60%);
+    background: -moz-linear-gradient(0deg, transparent, 20%, hsl(64deg, 40%, 85%) 60%);
+    background: linear-gradient(90deg, transparent, 20%, hsl(64deg, 40%, 85%) 60%);
+  }
+  #home header > nav > ul > li:nth-child(1) > a:link {
+    background: transparent;
+    background: -webkit-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -o-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -moz-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: linear-gradient(90deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+  }
+  #trust header > nav > ul > li:nth-child(2) > a:link {
+    background: transparent;
+    background: -webkit-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -o-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -moz-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: linear-gradient(90deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+  }
+  #scholars header > nav > ul > li:nth-child(3) > a:link {
+    background: transparent;
+    background: -webkit-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -o-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -moz-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: linear-gradient(90deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+  }
+  #place header > nav > ul > li:nth-child(4) > a:link {
+    background: transparent;
+    background: -webkit-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -o-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -moz-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: linear-gradient(90deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+  }
+  #stay header > nav > ul > li:nth-child(5) > a:link {
+    background: transparent;
+    background: -webkit-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -o-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -moz-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: linear-gradient(90deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+  }
+  #polo header > nav > ul > li:nth-child(6) > a:link {
+    background: transparent;
+    background: -webkit-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -o-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -moz-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: linear-gradient(90deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+  }
+  #medley header > nav > ul > li:nth-child(7) > a:link {
+    background: transparent;
+    background: -webkit-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -o-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -moz-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: linear-gradient(90deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+  }
+  #enquiries header > nav > ul > li:nth-child(8) > a:link {
+    background: transparent;
+    background: -webkit-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -o-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -moz-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: linear-gradient(90deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+  }
+  #photos header > nav > ul > li:nth-child(9) > a:link {
+    background: transparent;
+    background: -webkit-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -o-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -moz-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: linear-gradient(90deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+  }
+  #bond header > nav > ul > li:nth-child(10) > a:link {
+    background: transparent;
+    background: -webkit-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -o-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: -moz-linear-gradient(0deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+    background: linear-gradient(90deg, transparent, 20%, hsl(270deg, 100%, 20%) 60%);
+  }
+}
+@media screen and (max-width: 800px) {
+  header ul {
+    font: bold 0.9em/2 Arial, Verdana, Helvetica, serif;
+  }
+}
+video {
+  background-color: rgb(47, 47, 47);
+}
+
+img {
+  display: block;
+}
+
+header {
+  width: 100%;
+  position: relative;
+}
+
+body > div {
+  width: clamp(300px, 70%, 1000px);
+  margin: auto;
+}
+
+main {
+  position: relative;
+  padding: 0;
+}
+
+section {
+  margin: 3em 0 0;
+}
+
+section > input,
+nav > input {
+  cursor: pointer;
+  position: absolute;
+  left: -9999px;
+}
+
+.wrap > header > a {
+  display: block;
+  margin: 0;
+  top: 0;
+  min-width: 215px;
+  width: calc(215px + 160 * (100vw - 280px) / 387);
+  border: solid 1px transparent;
+}
+.wrap > header > a h1 {
+  position: relative;
+  height: 1px;
+  line-height: calc(3.8em + 78 * (100vw - 281px) / 387);
+  -ms-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.no-js .wrap > header > a h1 {
+  padding: 0 0 47.5% 0;
+  margin: 0.5em 0 3em 0;
+}
+
+h3 {
+  text-align: center;
+}
+
+ul.dual li {
+  display: flex;
+  justify-content: space-between;
+}
+ul.dual li.series {
+  font-weight: bold;
+}
+ul.dual li.series + ol {
+  font-size: 0.75em;
+  margin: 0 0 0 2em;
+  list-style: decimal;
+}
+ul.dual li.series + ol > li {
+  display: list-item;
+}
+ul.dual.found li em {
+  font-size: 0.5em;
+}
+
+ul.pp {
+  text-align: center;
+  display: flex;
+  color: white;
+  justify-content: space-between;
+  background-color: #76b0ef;
+  padding: 0.5em;
+  border-radius: 8px;
+  margin: 1em 0 0;
+}
+ul.pp > li > a {
+  color: #900;
+}
+ul.pp > li > a:hover {
+  color: white;
+}
+
+div#search {
+  background-color: black;
+  margin: 1em auto 0;
+  padding: 0.25em 0.5em;
+  border-radius: 8px;
+  position: relative;
+}
+div#search > a {
+  position: absolute;
+  top: 0;
+  right: 0.6em;
+  color: red;
+}
+div#search > form {
+  margin: 1.3em 0.1em 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+div#search > form > fieldset {
+  padding: 0.4em;
+  margin: 0 0 0.3em;
+  display: flex;
+  column-gap: 0.5em;
+  color: white;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 8px;
+  -webkit-box: 1;
+  -moz-box: 1;
+  -webkit-flex: 1 1 100%;
+  -ms-flex: 1 1 100%;
+  flex: 1 1 100%;
+}
+div#search > form > fieldset > label {
+  -webkit-box: 1;
+  -moz-box: 1;
+  -webkit-flex: 1 1 1em;
+  -ms-flex: 1 1 1em;
+  flex: 1 1 1em;
+}
+div#search > form > fieldset > input {
+  border-radius: 8px;
+  -webkit-box: 3;
+  -moz-box: 3;
+  -webkit-flex: 3 1 6em;
+  -ms-flex: 3 1 6em;
+  flex: 3 1 6em;
+  padding: 0.25em 0.1em;
+  display: block;
+  border: solid 1px white;
+}
+div#search > form input[type=submit] {
+  padding: 0.5em;
+  border-radius: 4px;
+}
+div#search > p {
+  margin: 0;
+}
+div#search > p > a {
+  color: whitesmoke;
+}
+
+div.affirm {
+  text-align: center;
+  background-color: black;
+  color: white;
+  border-radius: 8px 8px 0 0;
+  margin: 2em auto 0;
+  padding: 0.3em;
+}
+div.affirm p {
+  margin: 0;
+}
+div.affirm p a, div.affirm p strong {
+  color: yellow;
+}
+div.affirm + form.delete {
+  display: flex;
+  padding: 0.3em;
+  justify-content: space-around;
+  background-color: black;
+  border-radius: 0 0 8px 8px;
+  margin: auto;
+}
+div.affirm + form.delete > input {
+  display: block;
+}
+div.affirm + form.delete input[type=submit] {
+  padding: 0.5em;
+  border-radius: 4px;
+}
+
+form.edit {
+  padding: 0.75em;
+  text-align: center;
+  background-color: black;
+  width: clamp(300px, 50%, 1000px);
+  margin: 2em 0 0;
+  border-radius: 8px;
+}
+form.edit fieldset {
+  background-color: whitesmoke;
+  border-radius: 8px;
+  padding: 1em;
+  margin: 0 0 1em;
+  border-width: 0;
+}
+form.edit fieldset > * {
+  display: block;
+  width: 100%;
+  min-width: 100%;
+}
+form.edit input[type=submit] {
+  padding: 0.5em;
+  border-radius: 4px;
+}
+
+#logo {
+  margin: -9rem 0 0;
+}
+
+h3,
+section > label {
+  font-size: calc(1.4em + 8 * (100vw - 281px) / 387);
+}
+
+header > nav > ul {
+  position: absolute;
+  right: -999px;
+  width: 10em;
+  overflow: hidden;
+}
+
+header > nav input:checked + ul {
+  top: calc(54px + 10 * (100vw - 320px) / 430);
+  right: 1rem;
+  z-index: 1;
+  display: block;
+  overflow: visible;
+}
+header > nav input:checked + ul > li {
+  height: 2.85em;
+}
+
+section,
+section img,
+.touchevents body {
+  margin: 0;
+}
+
+section > label {
+  display: block;
+  width: 100%;
+}
+
+section img {
+  border-radius: 0;
+  border-width: 0;
+  box-shadow: none;
+  width: 100%;
+}
+
+section article p > img {
+  float: left;
+  margin: 0 3px 0 0;
+  width: auto;
+}
+section article p > img.right {
+  float: right;
+  margin: 0 0 0 3px;
+}
+section article p > a.left, section article p a.right, section article p a.none {
+  max-width: 1.2em;
+  font-size: 1.2em;
+  float: left;
+  margin: 0;
+}
+section article p > a.left > img, section article p a.right > img, section article p a.none > img {
+  float: none;
+  width: 100%;
+  display: block;
+  margin: 0;
+}
+section article p > a.left:hover, section article p a.right:hover, section article p a.none:hover {
+  background-color: white;
+}
+section article p > a.right {
+  float: right;
+  margin: 0 0 0 3px;
+}
+section article p > a.none {
+  float: none;
+  display: inline-block;
+}
+
+/*width reqd, other properties reqd in no-js scenario; */
+section > img {
+  /* explicitly set float to none in case browser doesn't support flex/grid*/
+  float: none;
+  width: 100%;
+}
+
+header nav > ul a,
+header nav > ul > li {
+  display: block;
+}
+
+header nav > ul > li {
+  height: 0px;
+  line-height: 2.7;
+  transition: height 0.9s ease-out;
+}
+
+footer {
+  width: 100%;
+  margin: 5em 0 2em;
+  padding: 2.1em 0 0;
+  padding: 0;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+}
+footer > div {
+  min-width: none;
+  max-width: none;
+  padding: 0.3em;
+}
+footer > div a {
+  display: block;
+}
+footer > div a img {
+  width: 100%;
+  display: block;
+}
+footer > div#footer_girl {
+  -webkit-box: 4;
+  -moz-box: 4;
+  -webkit-flex: 4 1 1em;
+  -ms-flex: 4 1 1em;
+  flex: 4 1 1em;
+}
+footer > div#footer_boy {
+  -webkit-box: 1;
+  -moz-box: 1;
+  -webkit-flex: 1 1 1em;
+  -ms-flex: 1 1 1em;
+  flex: 1 1 1em;
+}
+footer > a {
+  display: block;
+  width: 100%;
+  padding: 0 0.3em;
+  -webkit-box: 1;
+  -moz-box: 1;
+  -webkit-flex: 1 1 100%;
+  -ms-flex: 1 1 100%;
+  flex: 1 1 100%;
+}
+
+#main_nav {
+  /*so that menu is relative to header*/
+  position: static;
+  width: 100%;
+}
+
+.menu {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.read-more-trigger:before {
+  display: block;
+}
+
+section.ptrt > img {
+  margin: 1rem 0 0.25rem 1rem;
+  width: calc(150px + 60 * (100vw - 320px) / 347);
+}
+
+/*first section is shown by default in no-js scenario */
+/*in no-js img, "labels" and articles are siblings in js all other elements are children of article*/
+header ul ul,
+.read-more-state ~ article,
+section:first-child .read-more-state:checked ~ article,
+.js section article > *,
+.no-js .override section > article > h3 {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+}
+
+.js section article > img,
+input.read-more-state ~ img,
+section:first-child input.read-more-state:checked ~ img {
+  position: absolute;
+  left: -9999px;
+  top: -99em;
+  color: purple;
+}
+
+section:first-child .read-more-state ~ article,
+section:first-child .read-more-state ~ img,
+.read-more-state:checked ~ article,
+.read-more-state:checked ~ img,
+.no-js section:first-child article > *,
+.js section.active article > *,
+.js .override section > article > h3 {
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+section.portrait {
+  display: block;
+}
+section.portrait img {
+  float: right;
+  width: 50%;
+  margin: 0 0 1em 1em;
+}
+
+@media screen and (min-width: 320px) {
+  .wrap > header > a {
+    margin: 0 0 0 1rem;
+  }
+}
+@media screen and (max-width: 370px) {
+  section.ptrt article img {
+    width: 9rem;
+  }
+  section.ptrt article p:first-of-type {
+    text-align: left;
+  }
+}
+@media only screen and (max-width: 430px) {
+  header nav > ul > li {
+    line-height: 2.8;
+  }
+}
+.no-js #logo,
+.no-js svg {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+}
+
+@media screen and (min-width: 575px) {
+  html.no-js section.portrait {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    gap: 0.8em;
+  }
+  html.no-js section.portrait .read-more-trigger {
+    -webkit-box: 1;
+    -moz-box: 1;
+    -webkit-flex: 1 1 100%;
+    -ms-flex: 1 1 100%;
+    flex: 1 1 100%;
+  }
+  html.no-js section.portrait article {
+    -webkit-box: 3;
+    -moz-box: 3;
+    -webkit-flex: 3 1 1em;
+    -ms-flex: 3 1 1em;
+    flex: 3 1 1em;
+  }
+  html.no-js section.portrait img {
+    -webkit-box: 1;
+    -moz-box: 1;
+    -webkit-flex: 1 1 1em;
+    -ms-flex: 1 1 1em;
+    flex: 1 1 1em;
+    order: 3;
+    width: 100%;
+    margin: 0;
+  }
+  html.js section.portrait {
+    display: block;
+  }
+  html.js section.portrait article {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: auto 1fr 1fr 1fr 1fr;
+    row-gap: 1em;
+    column-gap: 1em;
+  }
+  html.js section.portrait article p {
+    grid-row: 3/4;
+    grid-column: 1/6;
+  }
+  html.js section.portrait article p:first-of-type {
+    grid-row: 2/3;
+  }
+  html.js section.portrait article h3 {
+    grid-row: 1/2;
+    grid-column: span 8;
+  }
+  html.js section.portrait article img {
+    grid-row: span 4;
+    grid-column: 6/9;
+    width: 100%;
+    margin: 0;
+  }
+}
+@media screen and (max-width: 751px) {
+  p {
+    margin: 0 0.8em 0.5em;
+  }
+  article p:first-of-type {
+    margin: 0.5em 0.8em;
+  }
+}
+/*
+@import 'components/myadmin';
+@import 'components/myadmin_layout';
+@import 'components/myadmin_article';
+@import 'components/myadmin_upload';
+*/
+
+/*# sourceMappingURL=main.css.map */

@@ -3,6 +3,7 @@
 namespace Ninja;
 
 use tv\tvWebsite;
+use DateTime;
 
 class DatabaseTable
 {
@@ -15,7 +16,7 @@ class DatabaseTable
     private function processDates($values)
     {
         foreach ($values as $key => $value) {
-            if ($value instanceof \DateTime) {
+            if ($value instanceof DateTime) {
                 $values[$key] = $value->format('Y-m-d');
             }
         }
@@ -118,15 +119,15 @@ class DatabaseTable
         $query = 'UPDATE `' . $this->table . '` SET ';
 
         foreach ($values as $key => $value) {
-            if ($postgres && $key == $this->primaryKey) {
+            if ($postgres && $key === $k) {
                 $values['pk'] = $values[$k];
-                unset($values[$this->primaryKey]);
+                unset($values[$k]);
                 continue;
             }
-            $query .= '`' . $key . '` = :' . $key . ',';
+            $query .= '`' . $key . '` = :' . $key . ', ';
         }
-        $query = rtrim($query, ',');
-        $query .= ' WHERE `' . $this->primaryKey . '` = :pk';
+        $query = rtrim($query, ', ');
+        $query .= ' WHERE `' . $k . '` = :pk';
 
         if ($postgres) {
             $query = preg_replace('/`/', '', $query);
@@ -139,7 +140,6 @@ class DatabaseTable
     }
     public function __construct(tvWebsite $www, string $t, string $pk, string $name = '\stdClass', array $args = [])
     {
-
         $this->pdo = $www->getPDO();
         $this->table = trim($t);
         $this->primaryKey = strpos($pk, ',') ? null : $pk;
@@ -252,12 +252,9 @@ class DatabaseTable
             if ($ofst > 0) {
                 $query .= ' OFFSET ' . $ofst;
             }
-
             $stmt = $this->pdo->prepare($query);
             //if(preg_match('/like/i', $op)) dump($parameters);
-
             $stmt->execute($parameters);
-
             if ($mode === \PDO::FETCH_CLASS) {
                 return $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->className, $this->constrArgs);
             }
@@ -282,7 +279,6 @@ class DatabaseTable
             $insertId = $this->insert($record, $arg);
             $entity->{$this->primaryKey} = $insertId;
         } else {
-           
             $this->update($record);
         }
         /*
@@ -294,8 +290,10 @@ class DatabaseTable
         }
         */
         foreach ($record as $key => $value) {
+         
             if (!empty($value)) {
-                if ($value instanceof \DateTime) {
+              //  if($key === 'recdate')  dump(get_class($value));
+                if ($value instanceof DateTime) {
                     $value = $value->format('Y-m-d H:i:s');
                 }
                 $entity->$key = $value;

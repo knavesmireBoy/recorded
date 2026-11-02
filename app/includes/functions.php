@@ -7,23 +7,39 @@ function autoloader($className)
     include $file;
 }
 
-function sortAlpha($arr){
+function sortAlpha($arr)
+{
     $alpha =  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x','y', 'z'];
     $i = 0;
     $order = [];
     $output = '';
-    while(isset($alpha[$i])){
+    while (isset($alpha[$i])) {
         $char = $alpha[$i];
         foreach ($arr as $k => $v) {
-          if(preg_match("/^$char/", $k)){
-            $output .= "'" . $k . "'";
-            $output .= ' => ';
-            $output .= '"' . $v . '"' .',';
-          }
+            if (preg_match("/^$char/", $k)) {
+                $output .= "'" . $k . "'";
+                $output .= ' => ';
+                $output .= '"' . $v . '"' . ',';
+            }
         }
         $i++;
     }
     return $output;
+}
+
+function butFalse($arg, $flag){
+    return isset($arg) && !$flag;
+}
+
+function multiSearch($multiarray, $cb, $i = 0)
+{
+    while (isset($multiarray[$i])) {
+        if ($cb($multiarray[$i])) {
+            break;
+        }
+        $i++;
+    }
+    return $i;
 }
 
 function getResult(mixed $arg)
@@ -39,10 +55,11 @@ function safeNull(array $o, $p)
     return $o[$p] ?? null;
 }
 
-function fnull(mixed $default, $cb = 'identity')
+function fnull(mixed $default, $cb = 'identity', $flag = false)
 {
-    return function ($arg) use ($default, $cb) {
-        return $arg && $cb($arg) ? $arg : $default;
+    return function ($arg) use ($default, $cb, $flag) {
+        $res = $arg ? $cb($arg) : null;
+        return $res && $flag ? $res : ($res ? $arg : $default);
     };
 }
 
@@ -113,7 +130,7 @@ function assetMoveFactory(string $path)
             }
             $path = $page ? "/$path" : $path;
             $to = preg_replace($reg, "$1$page$path", $from);
-            if($from !== $to){
+            if ($from !== $to) {
                 @rename($from, $to);
             }
         };
@@ -451,7 +468,7 @@ function partial($func, ...$args)
 function partial2($func, ...$args)
 {
     return function (...$newargs) use ($func, $args) {
-        return function(...$deferargs) use($func, $args, $newargs){
+        return function (...$deferargs) use ($func, $args, $newargs) {
             return $func(...$args, ...$newargs, ...$deferargs);
         };
     };
@@ -1322,7 +1339,8 @@ function doBestDefer($pred, $actions)
     };
 }
 
-function every($predicates){
+function every($predicates)
+{
     return array_reduce($predicates, fn($agg, $curr) => $agg && getResult($curr), true);
 }
 
@@ -1554,12 +1572,12 @@ function tester($i = 100)
 function doSetCookie($flag, $time = -1)
 {
     return function ($k, $v = '') use ($flag, $time) {
-        $v = $v ? $v : $k;
+        //$v = $v ? $v : $k;
+        //allow $v to be false; default to $k if otherwise empty
+        $v = is_bool($flag) ? $v : ($v ? $v : $k);
         if ($flag) {
-            $v = is_bool($flag) ? $v : $v;
+            //$v = is_bool($flag) ? $v : $v;
             $v = is_string($v) ? strtolower($v) : $v;
-
-           // dump([$v,$k]);
             setcookie($k, $v, $time, '/');
             $_COOKIE[$k] = $v;
         } elseif (isset($_COOKIE[$k]) && !$flag) {
@@ -1697,4 +1715,3 @@ function checkMarkdownFormatting($content)
     }
     return $key;
 }
-
