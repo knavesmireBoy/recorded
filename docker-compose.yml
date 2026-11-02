@@ -6,6 +6,6 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./app:/var/www/
+      - ./app:/var/www/html
     env_file:
       - .env
