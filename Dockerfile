@@ -1,5 +1,7 @@
 FROM php:8.4-apache
 
+WORKDIR /app/html
+
 RUN pecl install xdebug 
 RUN docker-php-ext-enable xdebug 
 
